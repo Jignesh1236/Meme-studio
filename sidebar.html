@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Meme Studio</title>
   <link rel="stylesheet" href="fontawesome.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&family=Bebas+Neue&family=Fredoka:wght@700&family=Raleway:wght@700&family=Montserrat:wght@700&family=Oswald:wght@700&display=swap" rel="stylesheet">
   <style>
     * {
       margin: 0;
@@ -13,35 +14,35 @@
     }
 
     :root {
-      --primary: #6366f1;
-      --primary-dark: #4f46e5;
-      --secondary: #8b5cf6;
-      --accent: #ec4899;
-      --success: #10b981;
-      --warning: #f59e0b;
-      --danger: #ef4444;
+      --primary: #0969da;
+      --primary-dark: #0860ca;
+      --secondary: #1f6feb;
+      --accent: #3fb950;
+      --success: #3fb950;
+      --warning: #d29922;
+      --danger: #da3633;
       
-      --bg-primary: #fafbfc;
-      --bg-secondary: #ffffff;
-      --bg-tertiary: #f5f7fa;
-      --text-primary: #1a202c;
-      --text-secondary: #718096;
-      --border: #e2e8f0;
-      --shadow: rgba(99, 102, 241, 0.08);
-      --shadow-md: rgba(99, 102, 241, 0.12);
-      --shadow-lg: rgba(99, 102, 241, 0.16);
+      --bg-primary: #0d1117;
+      --bg-secondary: #161b22;
+      --bg-tertiary: #21262d;
+      --text-primary: #c9d1d9;
+      --text-secondary: #8b949e;
+      --border: #30363d;
+      --shadow: rgba(0, 0, 0, 0.3);
+      --shadow-md: rgba(0, 0, 0, 0.4);
+      --shadow-lg: rgba(0, 0, 0, 0.5);
     }
 
     [data-theme="dark"] {
-      --bg-primary: #0a0e27;
-      --bg-secondary: #1a1f3a;
-      --bg-tertiary: #252a4a;
-      --text-primary: #f7fafc;
-      --text-secondary: #a0aec0;
-      --border: #2d3748;
-      --shadow: rgba(0, 0, 0, 0.4);
-      --shadow-md: rgba(0, 0, 0, 0.5);
-      --shadow-lg: rgba(0, 0, 0, 0.6);
+      --bg-primary: #0d1117;
+      --bg-secondary: #161b22;
+      --bg-tertiary: #21262d;
+      --text-primary: #c9d1d9;
+      --text-secondary: #8b949e;
+      --border: #30363d;
+      --shadow: rgba(0, 0, 0, 0.3);
+      --shadow-md: rgba(0, 0, 0, 0.4);
+      --shadow-lg: rgba(0, 0, 0, 0.5);
     }
 
     body {
@@ -55,32 +56,31 @@
 
     /* Header */
     .header {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      background: var(--bg-secondary);
       padding: 16px 20px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      box-shadow: 0 8px 24px var(--shadow-lg);
+      box-shadow: 0 1px 3px var(--shadow);
       position: sticky;
       top: 0;
       z-index: 100;
-      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
     }
 
     .header-title {
-      color: white;
+      color: var(--text-primary);
       font-size: 22px;
-      font-weight: 800;
+      font-weight: 700;
       display: flex;
       align-items: center;
       gap: 10px;
       letter-spacing: -0.5px;
-      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     }
 
     .header-title i {
       font-size: 24px;
-      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+      color: var(--primary);
     }
 
     .header-actions {
@@ -91,98 +91,80 @@
     .icon-btn {
       width: 40px;
       height: 40px;
-      border-radius: 12px;
+      border-radius: 8px;
       border: none;
-      background: rgba(255, 255, 255, 0.2);
-      backdrop-filter: blur(10px);
-      color: white;
+      background: var(--bg-tertiary);
+      color: var(--text-primary);
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.2s ease;
       font-size: 18px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      border: 1px solid var(--border);
     }
 
     .icon-btn:hover {
-      background: rgba(255, 255, 255, 0.35);
-      transform: translateY(-2px) scale(1.05);
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+      background: var(--border);
+      color: var(--primary);
+      transform: translateY(-1px);
     }
 
     .icon-btn:active {
-      transform: translateY(0) scale(0.98);
+      transform: translateY(0);
     }
 
     /* Navigation Tabs */
     .nav-tabs {
       display: flex;
-      background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
-      border-bottom: 2px solid var(--border);
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border);
       overflow-x: auto;
       padding: 8px 16px 0 16px;
       gap: 8px;
-      box-shadow: 0 2px 8px var(--shadow);
+      box-shadow: none;
     }
 
     .nav-tab {
       flex: 1;
       min-width: 100px;
-      padding: 14px 20px;
+      padding: 12px 20px;
       border: none;
       background: transparent;
       color: var(--text-secondary);
       cursor: pointer;
       font-size: 14px;
-      font-weight: 700;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      font-weight: 600;
+      transition: all 0.2s ease;
       position: relative;
       white-space: nowrap;
-      border-radius: 12px 12px 0 0;
+      border-radius: 8px 8px 0 0;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
     }
 
     .nav-tab:hover {
-      color: white;
-      background: linear-gradient(135deg, rgba(102, 126, 234, 0.8) 0%, rgba(118, 75, 162, 0.8) 100%);
-      transform: translateY(-3px);
-      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+      color: var(--text-primary);
+      background: var(--bg-tertiary);
     }
 
     .nav-tab.active {
-      color: white;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
-      transform: translateY(-2px);
-    }
-
-    .nav-tab.active::after {
-      content: '';
-      position: absolute;
-      bottom: -2px;
-      left: 20%;
-      right: 20%;
-      height: 4px;
-      background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
-      border-radius: 4px 4px 0 0;
-      box-shadow: 0 -2px 8px rgba(245, 87, 108, 0.5);
+      color: var(--primary);
+      background: transparent;
+      border-bottom: 2px solid var(--primary);
+      padding-bottom: 10px;
     }
 
     .nav-tab i {
       font-size: 18px;
-      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
     }
 
     /* Content Sections */
     .tab-content {
       display: none;
-      animation: fadeIn 0.3s;
+      animation: fadeIn 0.3s ease;
     }
 
     .tab-content.active {
@@ -190,7 +172,7 @@
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
+      from { opacity: 0; transform: translateY(8px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
@@ -206,11 +188,11 @@
     .input-label {
       display: block;
       font-size: 12px;
-      font-weight: 700;
+      font-weight: 600;
       color: var(--text-secondary);
-      margin-bottom: 10px;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
+      margin-bottom: 8px;
+      letter-spacing: 0;
+      text-transform: none;
       display: flex;
       align-items: center;
       gap: 8px;
@@ -218,9 +200,9 @@
 
     .input-label::before {
       content: '';
-      width: 4px;
-      height: 16px;
-      background: linear-gradient(180deg, var(--primary), var(--secondary));
+      width: 3px;
+      height: 14px;
+      background: var(--primary);
       border-radius: 2px;
     }
 
@@ -228,14 +210,14 @@
     input[type="file"],
     select {
       width: 100%;
-      padding: 14px 18px;
-      border: 2px solid var(--border);
-      border-radius: 14px;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
       background: var(--bg-secondary);
       color: var(--text-primary);
-      font-size: 15px;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 0 2px 6px var(--shadow);
+      font-size: 14px;
+      transition: all 0.2s ease;
+      box-shadow: none;
       font-weight: 500;
     }
 
@@ -243,13 +225,12 @@
     select:focus {
       outline: none;
       border-color: var(--primary);
-      background: var(--bg-primary);
-      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15), 0 6px 16px var(--shadow-md);
-      transform: translateY(-2px);
+      background: var(--bg-secondary);
+      box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.1);
     }
 
     input[type="file"] {
-      padding: 10px;
+      padding: 8px;
       cursor: pointer;
     }
 
@@ -257,16 +238,16 @@
     .btn {
       padding: 12px 24px;
       border: none;
-      border-radius: 12px;
+      border-radius: 8px;
       font-size: 14px;
-      font-weight: 700;
+      font-weight: 600;
       cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.2s ease;
       display: inline-flex;
       align-items: center;
       gap: 8px;
       justify-content: center;
-      letter-spacing: 0.3px;
+      letter-spacing: 0;
       position: relative;
       overflow: hidden;
     }
@@ -279,9 +260,9 @@
       width: 0;
       height: 0;
       border-radius: 50%;
-      background: rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.1);
       transform: translate(-50%, -50%);
-      transition: width 0.6s, height 0.6s;
+      transition: width 0.3s, height 0.3s;
     }
 
     .btn:hover::before {
@@ -290,36 +271,35 @@
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      background: var(--primary);
       color: white;
-      box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
-      font-weight: 700;
+      box-shadow: 0 1px 2px var(--shadow);
+      font-weight: 600;
     }
 
     .btn-primary:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 28px rgba(102, 126, 234, 0.5);
-      background: linear-gradient(135deg, #764ba2 0%, #f093fb 50%, #667eea 100%);
+      transform: translateY(-1px);
+      background: var(--primary-dark);
+      box-shadow: 0 2px 4px var(--shadow-md);
     }
 
     .btn-primary:active {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+      transform: translateY(0);
+      box-shadow: 0 1px 2px var(--shadow);
     }
 
     .btn-secondary {
-      background: linear-gradient(135deg, var(--bg-tertiary) 0%, var(--bg-secondary) 100%);
+      background: var(--bg-tertiary);
       color: var(--text-primary);
-      box-shadow: 0 3px 10px var(--shadow);
-      border: 2px solid var(--border);
+      box-shadow: 0 1px 2px var(--shadow);
+      border: 1px solid var(--border);
       font-weight: 600;
     }
 
     .btn-secondary:hover {
-      background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
-      transform: translateY(-3px);
-      box-shadow: 0 6px 16px var(--shadow-md);
-      border-color: var(--primary);
+      background: var(--border);
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px var(--shadow-md);
     }
 
     .btn:disabled {
@@ -333,8 +313,8 @@
     .gallery {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-      gap: 16px;
-      margin-top: 20px;
+      gap: 12px;
+      margin-top: 16px;
       max-height: calc(100vh - 280px);
       overflow-y: auto;
       padding-right: 8px;
@@ -342,14 +322,14 @@
 
     .gallery-item {
       position: relative;
-      border-radius: 16px;
+      border-radius: 8px;
       overflow: hidden;
       cursor: pointer;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.2s ease;
       background: var(--bg-secondary);
       aspect-ratio: 1;
-      box-shadow: 0 4px 12px var(--shadow-md);
-      border: 2px solid transparent;
+      box-shadow: 0 1px 3px var(--shadow);
+      border: 1px solid var(--border);
     }
 
     .gallery-item::before {
@@ -359,15 +339,15 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: linear-gradient(135deg, rgba(102, 126, 234, 0.3), rgba(240, 147, 251, 0.3));
+      background: rgba(9, 105, 218, 0.1);
       opacity: 0;
-      transition: opacity 0.3s;
+      transition: opacity 0.2s ease;
       z-index: 1;
     }
 
     .gallery-item:hover {
-      transform: translateY(-10px) scale(1.05);
-      box-shadow: 0 16px 40px rgba(102, 126, 234, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px var(--shadow-md);
       border-color: var(--primary);
     }
 
@@ -379,11 +359,11 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: transform 0.2s ease;
     }
 
     .gallery-item:hover .gallery-img {
-      transform: scale(1.1);
+      transform: scale(1.05);
     }
 
     .gallery-overlay {
@@ -391,10 +371,10 @@
       bottom: 0;
       left: 0;
       right: 0;
-      background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-      padding: 12px;
+      background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+      padding: 8px;
       opacity: 0;
-      transition: opacity 0.3s;
+      transition: opacity 0.2s ease;
       z-index: 2;
       display: flex;
       align-items: center;
@@ -402,9 +382,8 @@
     }
 
     .gallery-overlay i {
-      font-size: 24px;
+      font-size: 20px;
       color: white;
-      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
     }
 
     .gallery-item:hover .gallery-overlay {
@@ -417,21 +396,23 @@
       top: 8px;
       right: 8px;
       padding: 4px 8px;
-      border-radius: 6px;
+      border-radius: 4px;
       font-size: 10px;
-      font-weight: 700;
+      font-weight: 600;
       text-transform: uppercase;
       z-index: 3;
       display: flex;
       align-items: center;
       gap: 4px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 1px 3px var(--shadow);
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
       backdrop-filter: blur(4px);
     }
 
     .provider-badge.giphy {
-      background: linear-gradient(135deg, #ff6666 0%, #9933ff 100%);
-      color: white;
+      background: rgba(0, 0, 0, 0.7);
+      color: #ffd700;
     }
 
     .provider-badge i {
@@ -472,11 +453,11 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(0, 0, 0, 0.9);
+      background: rgba(0, 0, 0, 0.8);
       z-index: 1000;
       align-items: center;
       justify-content: center;
-      animation: fadeIn 0.2s;
+      animation: fadeIn 0.2s ease;
     }
 
     .modal.show {
@@ -484,13 +465,14 @@
     }
 
     .modal-content {
-      background: var(--bg-primary);
-      border-radius: 16px;
+      background: var(--bg-secondary);
+      border-radius: 8px;
       max-width: 90vw;
       max-height: 90vh;
       overflow: auto;
       position: relative;
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      border: 1px solid var(--border);
     }
 
     .modal-close {
@@ -498,6 +480,26 @@
       top: 16px;
       right: 16px;
       width: 36px;
+      height: 36px;
+      border-radius: 6px;
+      border: none;
+      background: var(--bg-tertiary);
+      color: var(--text-primary);
+      cursor: pointer;
+      font-size: 24px;
+      z-index: 10;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border);
+    }
+
+    .modal-close:hover {
+      transform: scale(1.05);
+      background: var(--danger);
+      color: white;
+    }
       height: 36px;
       border-radius: 50%;
       border: none;
@@ -519,12 +521,13 @@
       text-align: center;
       padding: 20px;
       display: inline-block;
+      width: 100%;
     }
 
     .modal-image {
       max-width: 100%;
       max-height: 60vh;
-      border-radius: 12px;
+      border-radius: 8px;
       display: block;
     }
 
@@ -535,20 +538,20 @@
       user-select: none;
       z-index: 5;
       padding: 8px;
-      border: 2px dashed rgba(99, 102, 241, 0.5);
+      border: 2px dashed rgba(9, 105, 218, 0.6);
       border-radius: 4px;
-      background: rgba(99, 102, 241, 0.1);
-      transition: border-color 0.2s;
+      background: rgba(9, 105, 218, 0.1);
+      transition: all 0.2s ease;
     }
 
     .draggable-text:hover {
-      border-color: rgba(99, 102, 241, 0.8);
-      background: rgba(99, 102, 241, 0.15);
+      border-color: rgba(9, 105, 218, 1);
+      background: rgba(9, 105, 218, 0.15);
     }
 
     .draggable-text.dragging {
-      border-color: rgba(99, 102, 241, 1);
-      background: rgba(99, 102, 241, 0.2);
+      border-color: rgba(9, 105, 218, 1);
+      background: rgba(9, 105, 218, 0.2);
     }
 
     .text-content {
@@ -604,9 +607,68 @@
     .text-editor {
       background: var(--bg-secondary);
       padding: 16px;
-      border-radius: 12px;
+      border-radius: 8px;
       margin-top: 16px;
     }
+
+    /* Crop Controls */
+    .crop-controls {
+      background: var(--bg-secondary);
+      padding: 16px;
+      border-radius: 8px;
+      margin-top: 16px;
+      display: none;
+    }
+
+    .crop-controls.show {
+      display: block;
+    }
+
+    .crop-container {
+      position: relative;
+      display: inline-block;
+      margin: 16px 0;
+    }
+
+    .crop-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      cursor: crosshair;
+      display: none;
+    }
+
+    .crop-overlay.active {
+      display: block;
+    }
+
+    .crop-box {
+      position: absolute;
+      border: 2px solid var(--primary);
+      background: transparent;
+      cursor: move;
+      display: none;
+    }
+
+    .crop-box.active {
+      display: block;
+    }
+
+    .crop-box .crop-handle {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: var(--primary);
+      border: 1px solid white;
+    }
+
+    .crop-box .crop-handle.nw { top: -5px; left: -5px; cursor: nwse-resize; }
+    .crop-box .crop-handle.ne { top: -5px; right: -5px; cursor: nesw-resize; }
+    .crop-box .crop-handle.sw { bottom: -5px; left: -5px; cursor: nesw-resize; }
+    .crop-box .crop-handle.se { bottom: -5px; right: -5px; cursor: nwse-resize; }
 
     .control-row {
       display: grid;
@@ -624,20 +686,22 @@
     input[type="color"] {
       width: 50px;
       height: 40px;
-      border: 2px solid var(--border);
-      border-radius: 8px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
       cursor: pointer;
+      background: var(--bg-tertiary);
     }
 
     input[type="range"] {
       width: 100%;
+      accent-color: var(--primary);
     }
 
     /* Filter Controls */
     .filter-controls {
       background: var(--bg-secondary);
       padding: 16px;
-      border-radius: 12px;
+      border-radius: 8px;
       margin-bottom: 16px;
     }
 
@@ -659,32 +723,32 @@
       position: fixed;
       bottom: 24px;
       right: 24px;
-      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      background: var(--success);
       color: white;
-      padding: 16px 24px;
-      border-radius: 16px;
-      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
+      padding: 12px 16px;
+      border-radius: 6px;
+      box-shadow: 0 4px 12px var(--shadow-md);
       z-index: 2000;
-      animation: slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      animation: slideIn 0.3s ease;
       display: none;
       font-weight: 600;
-      letter-spacing: 0.3px;
-      backdrop-filter: blur(10px);
+      letter-spacing: 0;
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .toast.show {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
 
     .toast i {
-      font-size: 18px;
+      font-size: 16px;
     }
 
     @keyframes slideIn {
       from { 
-        transform: translateX(120%) scale(0.8);
+        transform: translateX(120%) scale(0.9);
         opacity: 0;
       }
       to { 
@@ -1012,29 +1076,26 @@
     .empty-state i {
       font-size: 96px;
       margin-bottom: 24px;
-      opacity: 0.6;
-      background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      opacity: 0.5;
+      color: var(--primary);
       animation: pulse 2s ease-in-out infinite;
     }
 
     @keyframes pulse {
-      0%, 100% { opacity: 0.6; transform: scale(1); }
-      50% { opacity: 0.8; transform: scale(1.05); }
+      0%, 100% { opacity: 0.4; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(1.05); }
     }
 
     .empty-state h3 {
-      font-size: 24px;
+      font-size: 20px;
       margin-bottom: 12px;
-      font-weight: 800;
+      font-weight: 700;
       color: var(--text-primary);
-      letter-spacing: -0.5px;
+      letter-spacing: -0.3px;
     }
 
     .empty-state p {
-      font-size: 16px;
+      font-size: 14px;
       opacity: 0.7;
       font-weight: 500;
     }
@@ -1051,13 +1112,13 @@
     }
 
     ::-webkit-scrollbar-thumb {
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      background: var(--border);
       border-radius: 4px;
-      transition: background 0.3s;
+      transition: background 0.2s ease;
     }
 
     ::-webkit-scrollbar-thumb:hover {
-      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      background: var(--primary);
     }
 
     /* Content padding */
@@ -1125,20 +1186,25 @@
       <div class="input-group">
         <label class="input-label">Select Source</label>
         <select id="apiSelect">
-          <option value="memeapi">Reddit Memes</option>
+          <option value="memeapi">Reddit Memes (All)</option>
+          <option value="reddit-global">Reddit Global Search</option>
+          <option value="subreddit-search">Search Subreddit</option>
           <option value="imgflip">Imgflip</option>
-          <option value="giphy">Giphy</option>
+          <option value="tenor">Tenor GIFs</option>
           <option value="memegen">Memegen Templates</option>
-          <option value="namomemes">NaMo Memes</option>
         </select>
       </div>
-      <div class="input-group">
+      <div class="input-group" id="subredditGroup">
         <label class="input-label">Search Subreddit</label>
         <input type="text" id="subredditInput" placeholder="e.g., dankmemes, wholesomememes">
       </div>
+      <div class="input-group" id="globalSearchGroup" style="display:none;">
+        <label class="input-label">Search Reddit (Global)</label>
+        <input type="text" id="globalSearchInput" placeholder="e.g., programming, memes, funny">
+      </div>
       <div class="loading-container" id="trendingLoading">
         <div class="spinner"></div>
-        <p style="margin-top: 16px; color: var(--text-secondary);">Loading trending memes...</p>
+        <p style="margin-top: 16px; color: var(--text-secondary);">Loading memes...</p>
       </div>
       <div class="gallery" id="trendingGallery"></div>
       <button class="btn btn-primary" id="loadMoreTrendingBtn" style="width:100%; margin-top:16px; display:none;">
@@ -1185,6 +1251,9 @@
         <button class="btn btn-primary" id="addTextBtn">
           <i class="fas fa-font"></i> <span>Add Text</span>
         </button>
+        <button class="btn btn-primary" id="cropBtn">
+          <i class="fas fa-crop"></i> <span>Crop</span>
+        </button>
         <button class="btn btn-primary" id="filtersBtn">
           <i class="fas fa-sliders-h"></i> <span>Filters</span>
         </button>
@@ -1214,11 +1283,22 @@
             <div class="input-group">
               <label class="input-label">Font Family</label>
               <select id="fontFamily">
-                <option value="Impact">Impact</option>
+                <option value="Impact">Impact (Classic)</option>
+                <option value="Bebas Neue">Bebas Neue</option>
+                <option value="Arial Black">Arial Black (Bold)</option>
                 <option value="Arial">Arial</option>
-                <option value="Comic Sans MS">Comic Sans</option>
+                <option value="Oswald">Oswald (Modern)</option>
+                <option value="Montserrat">Montserrat</option>
+                <option value="Raleway">Raleway</option>
+                <option value="Roboto">Roboto</option>
+                <option value="Fredoka">Fredoka</option>
+                <option value="Georgia">Georgia</option>
                 <option value="Times New Roman">Times New Roman</option>
                 <option value="Courier New">Courier New</option>
+                <option value="Verdana">Verdana</option>
+                <option value="Trebuchet MS">Trebuchet MS</option>
+                <option value="Comic Sans MS">Comic Sans MS</option>
+                <option value="Palatino">Palatino</option>
               </select>
             </div>
             
@@ -1262,7 +1342,48 @@
               <input type="range" id="strokeWidth" min="0" max="10" value="4">
             </div>
           </div>
+        </di
+
+      <!-- Crop Controls -->
+      <div class="crop-controls" id="cropControls">
+        <h3 style="margin-bottom:16px; font-size:16px; font-weight:700; display:flex; align-items:center; gap:8px;">
+          <i class="fas fa-crop" style="color:var(--primary);"></i>
+          Crop Image
+        </h3>
+        
+        <div class="crop-container" id="cropContainer">
+          <img class="modal-image" id="cropImage" src="" alt="Crop Preview" style="max-width: 100%; border-radius: 8px;">
+          <div class="crop-overlay" id="cropOverlay"></div>
+          <div class="crop-box" id="cropBox">
+            <div class="crop-handle nw"></div>
+            <div class="crop-handle ne"></div>
+            <div class="crop-handle sw"></div>
+            <div class="crop-handle se"></div>
+          </div>
         </div>
+
+        <div class="control-row" style="margin-top:12px;">
+          <div class="input-group">
+            <label class="input-label">Aspect Ratio</label>
+            <select id="aspectRatio">
+              <option value="free">Free</option>
+              <option value="1:1">Square (1:1)</option>
+              <option value="4:3">4:3</option>
+              <option value="16:9">16:9</option>
+              <option value="9:16">Portrait (9:16)</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:12px; margin-top:16px;">
+          <button class="btn btn-primary" id="applyCropBtn" style="flex:1;">
+            <i class="fas fa-check"></i> <span>Apply Crop</span>
+          </button>
+          <button class="btn btn-secondary" id="cancelCropBtn" style="min-width:100px;">
+            <i class="fas fa-times"></i> <span>Cancel</span>
+          </button>
+        </div>
+      </div>v>
 
         <div style="display:flex; gap:12px; margin-top:16px;">
           <button class="btn btn-primary" id="applyTextBtn" style="flex:1;">

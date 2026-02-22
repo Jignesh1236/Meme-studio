@@ -61,6 +61,7 @@ const STORAGE_KEYS = {
 
 // Global State
 let currentImage = null;
+let currentImageIsGif = false;
 let currentFilters = {
   brightness: 100,
   contrast: 100,
@@ -384,10 +385,23 @@ async function searchImgflip(query) {
 
 async function searchReddit(query) {
   try {
+    // Try global search first
     const response = await fetch(`https://meme-api.com/gimme/${encodeURIComponent(query)}/20`);
     const data = await response.json();
-    if (data.memes) {
+    if (data.memes && data.memes.length > 0) {
       return data.memes.map(meme => ({
+        url: meme.url,
+        name: meme.title,
+        title: meme.title,
+        provider: 'reddit'
+      }));
+    }
+    
+    // Fallback to direct subreddit search
+    const response2 = await fetch(`https://meme-api.com/gimme/${encodeURIComponent(query)}/20`);
+    const data2 = await response2.json();
+    if (data2.memes) {
+      return data2.memes.map(meme => ({
         url: meme.url,
         name: meme.title,
         title: meme.title,
@@ -398,6 +412,7 @@ async function searchReddit(query) {
     console.error('Reddit search error:', error);
   }
   return [];
+}
 }
 
 async function searchTenor(query) {
@@ -516,10 +531,28 @@ function renderMoreMemes() {
 function initializeTrendingTab() {
   const apiSelect = document.getElementById('apiSelect');
   const subredditInput = document.getElementById('subredditInput');
+  const globalSearchInput = document.getElementById('globalSearchInput');
+  const subredditGroup = document.getElementById('subredditGroup');
+  const globalSearchGroup = document.getElementById('globalSearchGroup');
   const loadMoreBtn = document.getElementById('loadMoreTrendingBtn');
 
   apiSelect.addEventListener('change', () => {
-    fetchTrendingMemes(apiSelect.value);
+    const value = apiSelect.value;
+    
+    // Show/hide appropriate search input
+    if (value === 'reddit-global') {
+      globalSearchGroup.style.display = 'block';
+      subredditGroup.style.display = 'none';
+      document.getElementById('globalSearchInput').focus();
+    } else if (value === 'subreddit-search') {
+      subredditGroup.style.display = 'block';
+      globalSearchGroup.style.display = 'none';
+      document.getElementById('subredditInput').focus();
+    } else {
+      subredditGroup.style.display = 'none';
+      globalSearchGroup.style.display = 'none';
+      fetchTrendingMemes(value);
+    }
   });
 
   let searchTimeout;
@@ -528,6 +561,15 @@ function initializeTrendingTab() {
     searchTimeout = setTimeout(() => {
       if (e.target.value.trim()) {
         fetchSubredditMemes(e.target.value.trim());
+      }
+    }, 500);
+  });
+
+  globalSearchInput.addEventListener('input', (e) => {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => {
+      if (e.target.value.trim()) {
+        fetchGlobalRedditMemes(e.target.value.trim());
       }
     }, 500);
   });
@@ -630,6 +672,39 @@ async function fetchSubredditMemes(subreddit) {
     }
   } catch (error) {
     showToast('Error loading subreddit');
+  } finally {
+    loading.classList.remove('show');
+  }
+}
+
+async function fetchGlobalRedditMemes(query) {
+  const loading = document.getElementById('trendingLoading');
+  loading.classList.add('show');
+
+  try {
+    // Use meme-api for global Reddit search across all meme subreddits
+    const response = await fetch(`https://meme-api.com/gimme/${encodeURIComponent(query)}/30`);
+    const data = await response.json();
+    
+    if (data.memes && data.memes.length > 0) {
+      trendingMemes = data.memes;
+      renderTrendingMemes(trendingMemes);
+      showToast(`Found ${data.memes.length} results for "${query}"`);
+    } else {
+      // Try without prefix for direct subreddit search
+      const response2 = await fetch(`https://meme-api.com/gimme/${encodeURIComponent(query)}/30`);
+      const data2 = await response2.json();
+      
+      if (data2.memes) {
+        trendingMemes = data2.memes;
+        renderTrendingMemes(trendingMemes);
+      } else {
+        showToast('No results found for that query');
+      }
+    }
+  } catch (error) {
+    console.error('Reddit search error:', error);
+    showToast('Error searching Reddit. Try a different query.');
   } finally {
     loading.classList.remove('show');
   }
@@ -770,9 +845,11 @@ function initializeModal() {
   addTextBtn.addEventListener('click', () => {
     const textEditor = document.getElementById('textEditor');
     const filterControls = document.getElementById('filterControls');
+    const cropControls = document.getElementById('cropControls');
     const draggableText = document.getElementById('draggableText');
     
     filterControls.style.display = 'none';
+    cropControls.classList.remove('show');
     
     if (textEditor.style.display === 'none') {
       textEditor.style.display = 'block';
@@ -785,10 +862,27 @@ function initializeModal() {
     }
   });
 
+  // Crop button
+  document.getElementById('cropBtn').addEventListener('click', () => {
+    const textEditor = document.getElementById('textEditor');
+    const filterControls = document.getElementById('filterControls');
+    const cropControls = document.getElementById('cropControls');
+    
+    textEditor.style.display = 'none';
+    filterControls.style.display = 'none';
+    cropControls.classList.toggle('show');
+    
+    if (cropControls.classList.contains('show')) {
+      initializeCrop();
+    }
+  });
+
   filtersBtn.addEventListener('click', () => {
     const filterControls = document.getElementById('filterControls');
     const textEditor = document.getElementById('textEditor');
+    const cropControls = document.getElementById('cropControls');
     textEditor.style.display = 'none';
+    cropControls.classList.remove('show');
     filterControls.style.display = filterControls.style.display === 'none' ? 'block' : 'none';
   });
 
@@ -799,6 +893,12 @@ function initializeModal() {
     document.getElementById('textInput').value = '';
     document.getElementById('textContent').textContent = '';
     document.getElementById('advancedTextOptions').style.display = 'none';
+  });
+
+  // Crop handlers
+  document.getElementById('applyCropBtn').addEventListener('click', applyCrop);
+  document.getElementById('cancelCropBtn').addEventListener('click', () => {
+    document.getElementById('cropControls').classList.remove('show');
   });
 
   // Toggle advanced options
@@ -850,6 +950,7 @@ function initializeModal() {
 
 function openEditor(url, name = '') {
   currentImage = url;
+  currentImageIsGif = url.toLowerCase().endsWith('.gif') || url.includes('.gif');
   addToHistory(url, name);
   
   const modal = document.getElementById('editorModal');
@@ -859,9 +960,16 @@ function openEditor(url, name = '') {
   img.alt = name;
   modal.classList.add('show');
   
+  // Disable filters for GIFs during editing
+  if (currentImageIsGif) {
+    document.getElementById('filtersBtn').disabled = false;
+    document.getElementById('cropBtn').disabled = false;
+  }
+  
   // Reset editors
   document.getElementById('textEditor').style.display = 'none';
   document.getElementById('filterControls').style.display = 'none';
+  document.getElementById('cropControls').classList.remove('show');
   document.getElementById('draggableText').style.display = 'none';
   document.getElementById('textInput').value = '';
   document.getElementById('textContent').textContent = '';
@@ -1127,15 +1235,36 @@ function wrapText(ctx, text, maxWidth) {
 function downloadMeme() {
   const img = document.getElementById('modalImage');
   const link = document.createElement('a');
-  link.download = `meme-${Date.now()}.png`;
+  
+  // Use appropriate extension based on file type
+  const extension = currentImageIsGif ? 'gif' : 'png';
+  link.download = `meme-${Date.now()}.${extension}`;
   link.href = img.src;
   link.click();
-  showToast('Meme downloaded!');
+  showToast(`Meme downloaded as ${extension.toUpperCase()}!`);
 }
 
 async function copyMeme() {
   try {
     const img = document.getElementById('modalImage');
+    
+    // For GIFs, try to copy directly to preserve animation
+    if (currentImageIsGif) {
+      try {
+        const response = await fetch(img.src);
+        const blob = await response.blob();
+        
+        await navigator.clipboard.write([
+          new ClipboardItem({ 'image/gif': blob })
+        ]);
+        showToast('✓ GIF copied to clipboard (animated)!');
+        return;
+      } catch (gifError) {
+        console.log('GIF copy failed, falling back to PNG');
+      }
+    }
+    
+    // Fall back to PNG conversion for static images or when GIF copy fails
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
     
@@ -1265,6 +1394,153 @@ function initializeKeyboardShortcuts() {
       }
     }
   });
+}
+
+// Crop tool variables
+let cropData = {
+  x: 0,
+  y: 0,
+  w: 200,
+  h: 200,
+  isDragging: false,
+  dragType: null
+};
+
+function initializeCrop() {
+  const img = document.getElementById('modalImage');
+  const cropImage = document.getElementById('cropImage');
+  const cropOverlay = document.getElementById('cropOverlay');
+  const cropBox = document.getElementById('cropBox');
+  
+  cropImage.src = img.src;
+  cropOverlay.classList.add('active');
+  
+  // Initialize crop box
+  cropData.w = img.offsetWidth * 0.6;
+  cropData.h = img.offsetHeight * 0.6;
+  cropData.x = (img.offsetWidth - cropData.w) / 2;
+  cropData.y = (img.offsetHeight - cropData.h) / 2;
+  
+  updateCropBox();
+  
+  // Add event listeners
+  cropOverlay.addEventListener('mousedown', startCropDrag);
+  cropBox.querySelectorAll('.crop-handle').forEach(handle => {
+    handle.addEventListener('mousedown', startCropResize);
+  });
+  
+  document.addEventListener('mousemove', handleCropDrag);
+  document.addEventListener('mouseup', stopCropDrag);
+}
+
+function startCropDrag(e) {
+  if (e.target.closest('.crop-handle')) return;
+  cropData.isDragging = true;
+  cropData.dragType = 'move';
+  const rect = e.currentTarget.getBoundingClientRect();
+  cropData.startX = e.clientX - rect.left - cropData.x;
+  cropData.startY = e.clientY - rect.top - cropData.y;
+}
+
+function startCropResize(e) {
+  cropData.isDragging = true;
+  const handleClass = e.target.className.match(/nw|ne|sw|se/)[0];
+  cropData.dragType = handleClass;
+}
+
+function handleCropDrag(e) {
+  if (!cropData.isDragging) return;
+  
+  const cropOverlay = document.getElementById('cropOverlay');
+  const rect = cropOverlay.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  
+  if (cropData.dragType === 'move') {
+    cropData.x = x - cropData.startX;
+    cropData.y = y - cropData.startY;
+    
+    // Constrain within bounds
+    cropData.x = Math.max(0, Math.min(cropData.x, rect.width - cropData.w));
+    cropData.y = Math.max(0, Math.min(cropData.y, rect.height - cropData.h));
+  } else {
+    // Resize
+    const minSize = 50;
+    switch(cropData.dragType) {
+      case 'nw':
+        cropData.x = Math.min(x, cropData.x + cropData.w - minSize);
+        cropData.y = Math.min(y, cropData.y + cropData.h - minSize);
+        cropData.w = cropData.x + cropData.w - Math.min(x, cropData.x + cropData.w - minSize);
+        cropData.h = cropData.y + cropData.h - Math.min(y, cropData.y + cropData.h - minSize);
+        break;
+      case 'ne':
+        cropData.y = Math.min(y, cropData.y + cropData.h - minSize);
+        cropData.w = x - cropData.x;
+        cropData.h = cropData.y + cropData.h - Math.min(y, cropData.y + cropData.h - minSize);
+        break;
+      case 'sw':
+        cropData.x = Math.min(x, cropData.x + cropData.w - minSize);
+        cropData.w = cropData.x + cropData.w - Math.min(x, cropData.x + cropData.w - minSize);
+        cropData.h = y - cropData.y;
+        break;
+      case 'se':
+        cropData.w = x - cropData.x;
+        cropData.h = y - cropData.y;
+        break;
+    }
+    cropData.w = Math.max(minSize, cropData.w);
+    cropData.h = Math.max(minSize, cropData.h);
+  }
+  
+  updateCropBox();
+}
+
+function stopCropDrag() {
+  cropData.isDragging = false;
+  cropData.dragType = null;
+}
+
+function updateCropBox() {
+  const cropBox = document.getElementById('cropBox');
+  cropBox.classList.add('active');
+  cropBox.style.left = cropData.x + 'px';
+  cropBox.style.top = cropData.y + 'px';
+  cropBox.style.width = cropData.w + 'px';
+  cropBox.style.height = cropData.h + 'px';
+}
+
+function applyCrop() {
+  const img = document.getElementById('modalImage');
+  const cropImage = document.getElementById('cropImage');
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  
+  const newImg = new Image();
+  newImg.crossOrigin = 'anonymous';
+  
+  newImg.onload = () => {
+    // Calculate scale based on actual image size
+    const scaleX = newImg.width / cropImage.offsetWidth;
+    const scaleY = newImg.height / cropImage.offsetHeight;
+    
+    const cropX = cropData.x * scaleX;
+    const cropY = cropData.y * scaleY;
+    const cropW = cropData.w * scaleX;
+    const cropH = cropData.h * scaleY;
+    
+    canvas.width = cropW;
+    canvas.height = cropH;
+    
+    ctx.drawImage(newImg, cropX, cropY, cropW, cropH, 0, 0, cropW, cropH);
+    
+    img.src = canvas.toDataURL('image/png');
+    currentImage = img.src;
+    
+    document.getElementById('cropControls').classList.remove('show');
+    showToast('✂️ Image cropped successfully!');
+  };
+  
+  newImg.src = cropImage.src;
 }
 
 // Global function for onclick handlers
