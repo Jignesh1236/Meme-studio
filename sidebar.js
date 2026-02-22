@@ -413,7 +413,7 @@ async function searchReddit(query) {
   }
   return [];
 }
-}
+
 
 async function searchTenor(query) {
   try {
